@@ -16,7 +16,15 @@ inputs:
   resource_group:
     description: "resource group which is to be used"
     required: true
-    default: "newresource_grp"    
+    default: "newresource_grp"
+  appName:
+    description: "resource group which is to be used"
+    required: true
+    default: "newapp"
+  pattoken:
+    description: "patotoken of repository"
+    required: true
+    default: "asdasd"
 outputs:
   experiment_name:
     description: "Name of the experiment of the run"

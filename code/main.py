@@ -23,6 +23,16 @@ def deploy_functionApp(template_path, parameters_file_path,resource_group):
     except Exception as ex:
         raise ActionDeploymentError(ex)
 
+def app_PATTOKEN(token,appName,resource_group ):
+    try:
+        command = ('az functionapp config appsettings set --name {appName} --resource-group {resource_group} --settings "PATTOKEN={PATTOKEN}"').format(
+            PATTOKEN=token, appName=appName, resource_group=resource_group)
+        fapp_tokenadd = subprocess.check_output(command, shell=True)
+        fapp_tokenadd_json = json.loads(fapp_tokenadd)
+        return fapp_tokenadd_json # may here return just the values required to be returned
+    except Exception as ex:
+        raise ActionDeploymentError(ex)
+    
     
 def main():
     # # Loading input values
@@ -31,6 +41,8 @@ def main():
     template_params_file = os.environ.get("INPUT_ARMTEMPLATEPARAMS_FILE", default="deploy.params.json")
     azure_credentials = os.environ.get("INPUT_AZURE_CREDENTIALS", default="{}")
     resource_group = os.environ.get("INPUT_RESOURCE_GROUP", default="newresource_group")
+    function_appName = os.environ.get("INPUT_APPNAME", default="newfunctionApp")
+    repo_PatToken = os.environ.get("INPUT_PATTOKEN", default=" ")
 
     try:
         azure_credentials = json.loads(azure_credentials)
@@ -70,7 +82,8 @@ def main():
     except Exception as ex:
         print(ex)
     print(deploy_functionApp(template_file_file_path ,template_params_file_path , resource_group))
-    
+    print(" add pat token next to app")
+    app_PATTOKEN(repo_PatToken,function_appName,resource_group)
 
 
 if __name__ == "__main__":
